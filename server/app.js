@@ -1,8 +1,10 @@
 const express = require("express");
+const cors = require("cors");
 const { connectToDb, getDb } = require("./db");
 
 // init app & middleware
 const app = express();
+app.use(cors());
 const port = 3000;
 
 // Db connection
@@ -14,11 +16,12 @@ connectToDb((err) => {
       console.log(`App listening on port ${port}`);
     });
     db = getDb();
-  } else {
-    res
-      .status(500)
-      .json({ status: "failed", message: "Internal Server Error" });
   }
+  // else {
+  //   res
+  //     .status(500)
+  //     .json({ status: "failed", message: "Internal Server Error" });
+  // }
 });
 
 app.get("/characters", async (req, res) => {
