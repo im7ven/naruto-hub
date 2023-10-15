@@ -9,11 +9,12 @@ html {
 body {
     padding: 0;
     margin: 0;
-    background: #1a1a1a;
-    min-height: 100vh;
+    background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+min-height: 100vh;
     display: flex;
     justify-content: center; 
     align-items: center;
+    box-sizing: border-box;
 }
 
 `;
