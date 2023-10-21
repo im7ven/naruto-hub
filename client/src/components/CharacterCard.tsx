@@ -2,6 +2,7 @@ import styled from "styled-components";
 import useCharacters from "../hooks/useCharacters";
 import villageIcon from "../images/village.png";
 import Expandable from "./Expandable";
+import { Character } from "../types/Character";
 
 const CardContainer = styled.section`
   display: grid;
@@ -157,7 +158,11 @@ const NatureLabel = styled.p`
   font-family: "Gabarito", sans-serif;
 `;
 
-const CharacterCard = () => {
+interface Props {
+  character: Character | null;
+}
+
+const CharacterCard = ({ character }: Props) => {
   const { data } = useCharacters();
 
   const firstChar = data?.data[0];
@@ -165,44 +170,44 @@ const CharacterCard = () => {
   return (
     <div>
       <CardContainer>
-        <CharacterImage src={firstChar?.image} />
+        <CharacterImage src={character?.image} />
         <CardContent>
           <CardHeader>
-            <CharacterName>{firstChar?.name}</CharacterName>
-            <StatusOverline className={firstChar?.status ? "" : "deceased"}>
-              {firstChar?.status ? "Alive" : "Deceased"}
+            <CharacterName>{character?.name}</CharacterName>
+            <StatusOverline className={character?.status ? "" : "deceased"}>
+              {character?.status ? "Alive" : "Deceased"}
             </StatusOverline>
           </CardHeader>
           <StatWrapper>
             <div>
               <StatLabel>Overall</StatLabel>
-              <Stat>{firstChar?.overall}</Stat>
+              <Stat>{character?.overall}</Stat>
             </div>
             <div>
               <StatLabel>IQ</StatLabel>
-              <Stat>{firstChar?.iq}</Stat>
+              <Stat>{character?.iq}</Stat>
             </div>
             <div>
               <StatLabel>Abilities</StatLabel>
-              <Stat>{firstChar?.abilities}</Stat>
+              <Stat>{character?.abilities}</Stat>
             </div>
           </StatWrapper>
           <VillageContainer>
             <VillageIcon src={villageIcon} />
-            <Village>{firstChar?.village}</Village>
+            <Village>{character?.village}</Village>
           </VillageContainer>
           <Expandable
             maxChars={260}
-            decription={firstChar ? firstChar.description : ""}
+            decription={character ? character.description : ""}
           />
         </CardContent>
         <CardFooter>
           <StatLabel className="footer">Nature Transformations</StatLabel>
           <NatureWrapper>
-            {firstChar?.natureIcons.map((icon, index) => (
+            {character?.natureIcons.map((icon, index) => (
               <NatureGroup key={index}>
                 <NatureIcon src={icon} />
-                <NatureLabel>{firstChar.natureLabels[index]}</NatureLabel>
+                <NatureLabel>{character.natureLabels[index]}</NatureLabel>
               </NatureGroup>
             ))}
           </NatureWrapper>

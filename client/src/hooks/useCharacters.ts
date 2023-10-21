@@ -1,25 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-
-interface Character {
-  id: string;
-  name: string;
-  village: string;
-  image: string;
-  status: boolean;
-  overall: number;
-  iq: number;
-  abilities: number;
-  natureIcons: string[];
-  natureLabels: string[];
-  description: string;
-  imageIcon: string;
-}
-
-interface Characters {
-  amount: string;
-  data: Character[];
-}
+import { Characters } from "../types/Character";
 
 const useCharacters = () => {
   const fetchCharacters = () =>
