@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import useCharacters from "../hooks/useCharacters";
 import { Character, Characters } from "../types/Character";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -9,7 +8,7 @@ const Grid = styled.section`
   grid-template-rows: repeat(6, 1fr);
   gap: 1.3rem;
   padding: 3rem 2rem;
-  background: #000;
+  background: #232323;
   border-radius: 1rem;
 `;
 
@@ -17,7 +16,7 @@ const CharacterIcon = styled.img`
   width: 6rem;
   border-radius: 8px;
   border: 1px solid white;
-  box-shadow: 0 0 3px 1.5px red;
+  box-shadow: 0 0 5px 1.5px #6200f5;
   transition: 0.3s;
 
   &:hover {

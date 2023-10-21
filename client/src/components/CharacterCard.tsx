@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import useCharacters from "../hooks/useCharacters";
 import villageIcon from "../images/village.png";
 import Expandable from "./Expandable";
 import { Character, Characters } from "../types/Character";
 import { useQueryClient } from "@tanstack/react-query";
+import { animate, motion } from "framer-motion";
 
 const CardContainer = styled.section`
   display: grid;
@@ -15,7 +15,7 @@ const CardContainer = styled.section`
   color: #fff;
   border-radius: 25px;
   padding: 3rem 0 0;
-  box-shadow: 0 0 20px 1px grey;
+  // box-shadow: 0 0 10px 0.1px #cecece;
 `;
 
 const CardContent = styled.div`
@@ -161,10 +161,11 @@ const NatureLabel = styled.p`
 
 interface Props {
   character: Character | null;
+  animate: boolean;
 }
 
-const CharacterCard = ({ character }: Props) => {
-  const queryClient = useQueryClient(); // Access the query client
+const CharacterCard = ({ character, animate }: Props) => {
+  const queryClient = useQueryClient();
   const data = queryClient.getQueryData<Characters>(["characters"]);
 
   const firstCard = data?.data[0];
@@ -172,7 +173,12 @@ const CharacterCard = ({ character }: Props) => {
   const displayCard = !character ? firstCard : character;
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, x: -100 }}
+      animate={animate ? { opacity: 1, x: 0 } : {}}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+    >
       <CardContainer>
         <CharacterImage src={displayCard?.image} />
         <CardContent>
@@ -217,7 +223,7 @@ const CharacterCard = ({ character }: Props) => {
           </NatureWrapper>
         </CardFooter>
       </CardContainer>
-    </div>
+    </motion.div>
   );
 };
 

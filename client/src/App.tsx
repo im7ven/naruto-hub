@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CharacterCard from "./components/CharacterCard";
 import CharacterGrid from "./components/CharacterGrid";
 import { GlobalStyles } from "./styles.global";
 import { Character } from "./types/Character";
 import styled from "styled-components";
 import useCharacters from "./hooks/useCharacters";
+import { AnimatePresence } from "framer-motion";
 
 const Layout = styled.div`
   display: grid;
@@ -19,15 +20,44 @@ function App() {
     null
   );
 
+  const [animate, setAnimate] = useState(true);
+
   const handleSelectedCharacter = (character: Character) => {
-    setSelectedCharacter(character);
+    if (character === selectedCharacter) {
+      return;
+    }
+    setAnimate(false); // Disable animation
+    setTimeout(() => {
+      setSelectedCharacter(character);
+    }, 400);
   };
+
+  useEffect(() => {
+    // Enable animation after a short delay when character changes
+    if (selectedCharacter) {
+      setTimeout(() => setAnimate(true), 100);
+    }
+  }, [selectedCharacter]); // Re-run effect when selectedCharacter changes
+
+  // ...existing code...
+
+  // const handleSelectedCharacter = (character: Character) => {
+  //   setSelectedCharacter(character);
+  // };
 
   return (
     <>
       <GlobalStyles />
       <Layout>
-        <CharacterCard character={selectedCharacter} />
+        <AnimatePresence>
+          {selectedCharacter && (
+            <CharacterCard
+              animate={animate}
+              key={selectedCharacter.id}
+              character={selectedCharacter}
+            />
+          )}
+        </AnimatePresence>
         <CharacterGrid onSelectedCharacter={handleSelectedCharacter} />
       </Layout>
     </>
