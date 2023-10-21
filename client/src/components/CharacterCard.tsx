@@ -1,9 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import styled from "styled-components";
+import useCharacters from "../hooks/useCharacters";
 import villageIcon from "../images/village.png";
-import test from "../images/deidaraPs.webp";
-import earth from "../images/Nature_Icon_Earth.svg";
+import Expandable from "./Expandable";
 
 const CardContainer = styled.section`
   display: grid;
@@ -11,7 +9,7 @@ const CardContainer = styled.section`
   grid-template-rows: auto, auto;
   align-items: center;
   background: #000;
-  width: 50rem;
+  width: 58rem;
   color: #fff;
   border-radius: 25px;
   padding: 3rem 0 0;
@@ -23,14 +21,17 @@ const CardContent = styled.div`
 `;
 
 const CharacterImage = styled.img`
-  max-width: 30rem;
+  max-width: 35rem;
   transform: translateX(-50%);
+  max-height: 50rem;
+  min-height: 40rem;
 `;
 
 const CardHeader = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-b
 `;
 
 const StatusOverline = styled.p`
@@ -41,6 +42,10 @@ const StatusOverline = styled.p`
   font-weight: 700;
   margin-bottom: 0;
   color: #37d17f;
+
+  &.deceased {
+    color: #ff4a4a;
+  }
 `;
 
 const CharacterName = styled.h2`
@@ -48,6 +53,8 @@ const CharacterName = styled.h2`
   font-weight: 900;
   font-size: 4.5rem;
   margin: 0;
+  line-height: 3.4rem;
+  max-width: 24.5rem;
 `;
 
 const VillageContainer = styled.div`
@@ -66,20 +73,21 @@ const Village = styled.p`
   margin: 0;
   font-family: "Gabarito", sans-serif;
   font-size: 2rem;
+  color: #cdbef0;
 `;
 
-const CharacterDescription = styled.p`
-  font-family: "Gabarito", sans-serif;
-  font-size: 1.7rem;
-  line-height: 2.4rem;
-  margin: 0;
-`;
+// const CharacterDescription = styled.p`
+//   font-family: "Gabarito", sans-serif;
+//   font-size: 1.7rem;
+//   line-height: 2.4rem;
+//   margin: 0;
+// `;
 
 const StatWrapper = styled.div`
   display: flex;
   justify-content: space-between;
 
-  margin: 1rem 0;
+  margin: 2.4rem 0 1rem;
 `;
 
 const StatLabel = styled.h3`
@@ -109,19 +117,16 @@ const Stat = styled.p`
   margin: 0;
   font-family: "Gabarito", sans-serif;
   font-weight: 700;
-
-  &.abilities {
-    font-size: 1.7rem;
-  }
 `;
 
 const CardFooter = styled.footer`
   margin-top: 2rem;
   background: #2c2c2c;
-  // height: 9rem;
+
   grid-area: 2 / 1 / 3 / 3;
   border-bottom-right-radius: 25px;
-  padding: 1rem 0;
+  border-bottom-left-radius: 25px;
+  padding: 1rem;
   box-sizing: border-box;
 `;
 
@@ -129,118 +134,77 @@ const NatureWrapper = styled.div`
   display: flex;
   gap: 2rem;
   justify-content: center;
+  margin: 0 auto;
   color: #fff;
   font-size: 3rem;
+  flex-wrap: wrap;
+  max-width: 40rem;
 `;
 
 const NatureGroup = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
 `;
 
 const NatureIcon = styled.img`
-  width: 35px;
+  width: 30px;
 `;
 
 const NatureLabel = styled.p`
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   margin: 0;
   font-family: "Gabarito", sans-serif;
 `;
 
-interface Character {
-  id: string;
-  name: string;
-  village: string;
-  image: string;
-}
-
-interface Characters {
-  amount: string;
-  data: Character[];
-}
-
 const CharacterCard = () => {
-  const { data } = useQuery({
-    queryKey: ["characters"],
-    queryFn: () => {
-      return axios
-        .get<Characters>("http://localhost:3000/characters")
-        .then((res) => res.data);
-    },
-  });
+  const { data } = useCharacters();
+
+  const firstChar = data?.data[0];
 
   return (
     <div>
       <CardContainer>
-        <CharacterImage src={test} />
+        <CharacterImage src={firstChar?.image} />
         <CardContent>
           <CardHeader>
-            <CharacterName>Dedara</CharacterName>
-            <StatusOverline>Alive</StatusOverline>
+            <CharacterName>{firstChar?.name}</CharacterName>
+            <StatusOverline className={firstChar?.status ? "" : "deceased"}>
+              {firstChar?.status ? "Alive" : "Deceased"}
+            </StatusOverline>
           </CardHeader>
           <StatWrapper>
             <div>
-              <StatLabel>Power</StatLabel>
-              <Stat>95</Stat>
+              <StatLabel>Overall</StatLabel>
+              <Stat>{firstChar?.overall}</Stat>
             </div>
             <div>
               <StatLabel>IQ</StatLabel>
-              <Stat>95</Stat>
+              <Stat>{firstChar?.iq}</Stat>
             </div>
             <div>
               <StatLabel>Abilities</StatLabel>
-              <Stat className="abilities">Ninjustu</Stat>
+              <Stat>{firstChar?.abilities}</Stat>
             </div>
           </StatWrapper>
           <VillageContainer>
             <VillageIcon src={villageIcon} />
-            <Village>The Hidden Sand</Village>
+            <Village>{firstChar?.village}</Village>
           </VillageContainer>
-          <CharacterDescription>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam
-            officiis numquam aliquam ducimus quis, delectus obcaecati! Eius est
-            impedit dolor a dolores voluptatum nihil natus, dicta iste nisi unde
-            laudantium exercitationem quis aliquam possimus eaque quia alias
-            minus. Placeat, accusantium.
-          </CharacterDescription>
+          <Expandable
+            maxChars={260}
+            decription={firstChar ? firstChar.description : ""}
+          />
         </CardContent>
         <CardFooter>
           <StatLabel className="footer">Nature Transformations</StatLabel>
           <NatureWrapper>
-            <NatureGroup>
-              <NatureIcon src={earth} />
-              <NatureLabel>Earth</NatureLabel>
-            </NatureGroup>
-            <NatureGroup>
-              <NatureIcon src={earth} />
-              <NatureLabel>Earth</NatureLabel>
-            </NatureGroup>
-            <NatureGroup>
-              <NatureIcon src={earth} />
-              <NatureLabel>Earth</NatureLabel>
-            </NatureGroup>
-            <NatureGroup>
-              <NatureIcon src={earth} />
-              <NatureLabel>Earth</NatureLabel>
-            </NatureGroup>
-            <NatureGroup>
-              <NatureIcon src={earth} />
-              <NatureLabel>Earth</NatureLabel>
-            </NatureGroup>
-            <NatureGroup>
-              <NatureIcon src={earth} />
-              <NatureLabel>Earth</NatureLabel>
-            </NatureGroup>
-            <NatureGroup>
-              <NatureIcon src={earth} />
-              <NatureLabel>Earth</NatureLabel>
-            </NatureGroup>
-            <NatureGroup>
-              <NatureIcon src={earth} />
-              <NatureLabel>Earth</NatureLabel>
-            </NatureGroup>
+            {firstChar?.natureIcons.map((icon, index) => (
+              <NatureGroup key={index}>
+                <NatureIcon src={icon} />
+                <NatureLabel>{firstChar.natureLabels[index]}</NatureLabel>
+              </NatureGroup>
+            ))}
           </NatureWrapper>
         </CardFooter>
       </CardContainer>
