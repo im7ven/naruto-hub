@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import useCharacters from "../hooks/useCharacters";
-import { Character } from "../types/Character";
+import { Character, Characters } from "../types/Character";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Grid = styled.section`
   display: inline-grid;
@@ -8,7 +9,7 @@ const Grid = styled.section`
   grid-template-rows: repeat(6, 1fr);
   gap: 1.3rem;
   padding: 3rem 2rem;
-  background: #1b1b1b;
+  background: #000;
   border-radius: 1rem;
 `;
 
@@ -16,7 +17,7 @@ const CharacterIcon = styled.img`
   width: 6rem;
   border-radius: 8px;
   border: 1px solid white;
-  box-shadow: 0 0 5px 1px red;
+  box-shadow: 0 0 3px 1.5px red;
   transition: 0.3s;
 
   &:hover {
@@ -29,7 +30,9 @@ interface Props {
 }
 
 const CharacterGrid = ({ onSelectedCharacter }: Props) => {
-  const { data } = useCharacters();
+  //   const { data } = useCharacters();
+  const queryClient = useQueryClient(); // Access the query client
+  const data = queryClient.getQueryData<Characters>(["characters"]);
 
   return (
     <Grid>

@@ -2,7 +2,8 @@ import styled from "styled-components";
 import useCharacters from "../hooks/useCharacters";
 import villageIcon from "../images/village.png";
 import Expandable from "./Expandable";
-import { Character } from "../types/Character";
+import { Character, Characters } from "../types/Character";
+import { useQueryClient } from "@tanstack/react-query";
 
 const CardContainer = styled.section`
   display: grid;
@@ -163,51 +164,54 @@ interface Props {
 }
 
 const CharacterCard = ({ character }: Props) => {
-  const { data } = useCharacters();
+  const queryClient = useQueryClient(); // Access the query client
+  const data = queryClient.getQueryData<Characters>(["characters"]);
 
-  const firstChar = data?.data[0];
+  const firstCard = data?.data[0];
+
+  const displayCard = !character ? firstCard : character;
 
   return (
     <div>
       <CardContainer>
-        <CharacterImage src={character?.image} />
+        <CharacterImage src={displayCard?.image} />
         <CardContent>
           <CardHeader>
-            <CharacterName>{character?.name}</CharacterName>
-            <StatusOverline className={character?.status ? "" : "deceased"}>
-              {character?.status ? "Alive" : "Deceased"}
+            <CharacterName>{displayCard?.name}</CharacterName>
+            <StatusOverline className={displayCard?.status ? "" : "deceased"}>
+              {displayCard?.status ? "Alive" : "Deceased"}
             </StatusOverline>
           </CardHeader>
           <StatWrapper>
             <div>
               <StatLabel>Overall</StatLabel>
-              <Stat>{character?.overall}</Stat>
+              <Stat>{displayCard?.overall}</Stat>
             </div>
             <div>
               <StatLabel>IQ</StatLabel>
-              <Stat>{character?.iq}</Stat>
+              <Stat>{displayCard?.iq}</Stat>
             </div>
             <div>
               <StatLabel>Abilities</StatLabel>
-              <Stat>{character?.abilities}</Stat>
+              <Stat>{displayCard?.abilities}</Stat>
             </div>
           </StatWrapper>
           <VillageContainer>
             <VillageIcon src={villageIcon} />
-            <Village>{character?.village}</Village>
+            <Village>{displayCard?.village}</Village>
           </VillageContainer>
           <Expandable
             maxChars={260}
-            decription={character ? character.description : ""}
+            decription={displayCard ? displayCard.description : ""}
           />
         </CardContent>
         <CardFooter>
           <StatLabel className="footer">Nature Transformations</StatLabel>
           <NatureWrapper>
-            {character?.natureIcons.map((icon, index) => (
+            {displayCard?.natureIcons.map((icon, index) => (
               <NatureGroup key={index}>
                 <NatureIcon src={icon} />
-                <NatureLabel>{character.natureLabels[index]}</NatureLabel>
+                <NatureLabel>{displayCard.natureLabels[index]}</NatureLabel>
               </NatureGroup>
             ))}
           </NatureWrapper>
