@@ -16,12 +16,11 @@ connectToDb((err) => {
       console.log(`App listening on port ${port}`);
     });
     db = getDb();
+  } else {
+    res
+      .status(500)
+      .json({ status: "failed", message: "Internal Server Error" });
   }
-  // else {
-  //   res
-  //     .status(500)
-  //     .json({ status: "failed", message: "Internal Server Error" });
-  // }
 });
 
 app.get("/characters", async (req, res) => {
