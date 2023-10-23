@@ -17,15 +17,15 @@ const ExpandableBtn = styled.button`
   color: #fff;
   outline: 0;
   border: 1px solid #ff3923;
-  background: 0;
+  background: linear-gradient(
+    99deg,
+    rgba(254, 48, 48, 1) 13%,
+    rgba(22, 22, 22, 1) 100%
+  );
   transition: background 0.3s;
 
   &:hover {
-    background: linear-gradient(
-      99deg,
-      rgba(254, 48, 48, 1) 13%,
-      rgba(22, 22, 22, 1) 100%
-    );
+    background: 0;
   }
 `;
 

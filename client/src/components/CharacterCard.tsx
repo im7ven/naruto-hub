@@ -1,9 +1,9 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import styled from "styled-components";
 import villageIcon from "../images/village.png";
-import Expandable from "./Expandable";
 import { Character, Characters } from "../types/Character";
-import { useQueryClient } from "@tanstack/react-query";
-import { animate, motion } from "framer-motion";
+import Expandable from "./Expandable";
 
 const CardContainer = styled.section`
   display: grid;
@@ -15,7 +15,7 @@ const CardContainer = styled.section`
   color: #fff;
   border-radius: 25px;
   padding: 3rem 0 0;
-  // box-shadow: 0 0 10px 0.1px #cecece;
+  box-shadow: 0 2px 5px 1px #1b1b1b;
 `;
 
 const CardContent = styled.div`
@@ -77,13 +77,6 @@ const Village = styled.p`
   font-size: 2rem;
   color: #cdbef0;
 `;
-
-// const CharacterDescription = styled.p`
-//   font-family: "Gabarito", sans-serif;
-//   font-size: 1.7rem;
-//   line-height: 2.4rem;
-//   margin: 0;
-// `;
 
 const StatWrapper = styled.div`
   display: flex;
@@ -176,8 +169,7 @@ const CharacterCard = ({ character, animate }: Props) => {
     <motion.div
       initial={{ opacity: 0, x: -100 }}
       animate={animate ? { opacity: 1, x: 0 } : {}}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 0.4 }}
     >
       <CardContainer>
         <CharacterImage src={displayCard?.image} />
