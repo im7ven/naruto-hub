@@ -2,7 +2,7 @@
 .env
 
 # Ignore node modules
-# node_modules/
+node_modules/
 
 # Ignore build artifacts
 build/
@@ -18,5 +18,4 @@ logs/
 .editorconfig
 
 # Ignore dependency lock files
-yarn.lock
 package-lock.json
