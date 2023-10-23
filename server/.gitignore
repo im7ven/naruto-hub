@@ -1,8 +1,2 @@
-# Ignore environment variables file
-.env
 node_modules/
-build/
-dist/
-logs/
-*.log
 package-lock.json
